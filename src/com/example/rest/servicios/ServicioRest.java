@@ -15,11 +15,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.example.rest.dao.MarcaModel;
+import com.example.rest.dao.PedidoModel;
 import com.example.rest.dao.ProveedorModel;
+import com.example.rest.dao.UbigeoModel;
 import com.example.rest.dao.UsuarioModel;
 import com.example.rest.entidades.Marca;
 import com.example.rest.entidades.Proveedor;
+import com.example.rest.entidades.Ubigeo;
 import com.example.rest.entidades.Usuario;
+import com.example.rest.entidades.Pedido;
+
 
 @Path("/servicios")
 @Produces({ MediaType.APPLICATION_JSON })
@@ -29,6 +34,8 @@ public class ServicioRest {
 	private UsuarioModel daoUser = new UsuarioModel();
 	//private MarcaModel daoMarca = new MarcaModel();
 	private ProveedorModel daoProv = new ProveedorModel();
+	private UbigeoModel daoUbigeo = new UbigeoModel();
+	private PedidoModel daoPedido = new PedidoModel();
 	
 	@GET
 	@Path("/login")
@@ -152,11 +159,66 @@ public class ServicioRest {
 	}
 	
 	
+	// -----------------------------------------------
+		// Ubigeo
+		// -----------------------------------------------
+
+	@GET
+	@Path("/departamentos")
+	public Response listarDepartamentos() {
+			log.info("listar departamentos");
+			return Response.ok(daoUbigeo.listarDepartamentos()).build();
+		}
+
+		@GET
+		@Path("/provincias/{depa}")
+		public Response listarProvincias(@PathParam("depa") String idDepa) {
+			log.info("listar provincias");
+			Ubigeo obj = new Ubigeo();
+			obj.setDepartamento(idDepa);
+			return Response.ok(daoUbigeo.listarProvincia(obj)).build();
+		}
+
+		@GET
+		@Path("/distritos/{depa}/{pro}")
+		public Response listarDistritos(@PathParam("depa") String idDepa, @PathParam("pro") String idPro) {
+			log.info("listar Distritos");
+			Ubigeo obj = new Ubigeo();
+			obj.setDepartamento(idDepa);
+			obj.setProvincia(idPro);
+			return Response.ok(daoUbigeo.listarDistrito(obj)).build();
+		}
 	
 	
 	
 	
-	
-	
-	
+	@GET
+	@Path("/fechaRegistro")
+	public Response listarFechaRegistro() {
+		log.info("listar fechaRegistro");
+		return Response.ok(daoPedido.listarFechaRegistro()).build();
+	}
+
+	@GET
+	@Path("/fechaEntrega/{reg}")
+	public Response listarFechaEntrega(@PathParam("reg") String idReg) {
+		log.info("listar fechaEntrega");
+		Pedido obj = new Pedido();
+		obj.setFechaRegistro(idReg);
+		return Response.ok(daoPedido.listarFechaEntrega(obj)).build();
+	}
+
+
+	@GET
+	@Path("/lugarEntrega/{reg}/{lug}")
+	public Response listarLugarEntrega(@PathParam("reg") String idReg,@PathParam("lug") String idEnt) {
+		log.info("listar lugarEntrega");
+		Pedido obj = new Pedido();
+		obj.setFechaRegistro(idReg);
+		obj.setFechaEntrega(idEnt);
+		return Response.ok(daoPedido.listarLugarEntrega(obj)).build();
+	}
 }
+
+
+	
