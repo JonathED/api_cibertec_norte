@@ -7,12 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Ubigeo {
+public class Rol {
 
-	private int idUbigeo;
-	private String departamento;
-	private String provincia;
-	private String distrito;
+	private Integer idrol;
+	private String nombre;
+	private String estado;
 
-	
 }
