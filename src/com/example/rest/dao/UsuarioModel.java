@@ -7,13 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.example.rest.entidades.Usuario;
 import com.example.rest.util.MySqlDBConexion;
 
-import lombok.extern.apachecommons.CommonsLog;
-
-@CommonsLog
 public class UsuarioModel {
+
+	private static final Log log = LogFactory.getLog(MarcaModel.class);
 
 	public Usuario login(Usuario bean) {
 		Connection conn = null;

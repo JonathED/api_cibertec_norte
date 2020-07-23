@@ -1,10 +1,8 @@
 package com.example.rest.servicios;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,17 +12,21 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.example.rest.dao.ClienteModel;
+import com.example.rest.dao.ComprobanteModel;
 import com.example.rest.dao.MarcaModel;
+import com.example.rest.dao.PaisModel;
 import com.example.rest.dao.PedidoModel;
+import com.example.rest.dao.ProductoModel;
 import com.example.rest.dao.ProveedorModel;
 import com.example.rest.dao.UbigeoModel;
 import com.example.rest.dao.UsuarioModel;
-import com.example.rest.entidades.Marca;
-import com.example.rest.entidades.Proveedor;
+import com.example.rest.entidades.Cliente;
+import com.example.rest.entidades.Comprobante;
+import com.example.rest.entidades.Pedido;
+import com.example.rest.entidades.Producto;
 import com.example.rest.entidades.Ubigeo;
 import com.example.rest.entidades.Usuario;
-import com.example.rest.entidades.Pedido;
-
 
 @Path("/servicios")
 @Produces({ MediaType.APPLICATION_JSON })
@@ -110,14 +112,13 @@ public class ServicioRest {
 		log.info("listars marca rest ");
 		return Response.ok(daoPedido.listaPedido()).build();
 	}
-	
+
 	@GET
 	@Path("/listaPedido/{pedido}")
 	public Response listaPedido(@PathParam("pedido") int idDepa) {
 		log.info("listars marca rest ");
 		return Response.ok(daoPedido.listaPedidoPorId(idDepa)).build();
 	}
-	
 
 	@GET
 	@Path("/departamentos")

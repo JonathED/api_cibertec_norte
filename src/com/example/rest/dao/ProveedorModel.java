@@ -10,11 +10,12 @@ import java.util.List;
 import com.example.rest.entidades.Proveedor;
 import com.example.rest.util.MySqlDBConexion;
 
-import lombok.extern.apachecommons.CommonsLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-@CommonsLog
 public class ProveedorModel {
 
+	private static final Log log = LogFactory.getLog(MarcaModel.class);
 	//El metodo que va inserta en la tabla proveedor
 		public int insertaProveedor(Proveedor p){
 			int salida = -1;

@@ -10,11 +10,12 @@ import java.util.List;
 import com.example.rest.entidades.Ubigeo;
 import com.example.rest.util.MySqlDBConexion;
 
-import lombok.extern.apachecommons.CommonsLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-@CommonsLog
 public class UbigeoModel {
 
+	private static final Log log = LogFactory.getLog(MarcaModel.class);
 	public List<String> listarDepartamentos() {
 		Connection conn = null;
 		PreparedStatement pstm = null;

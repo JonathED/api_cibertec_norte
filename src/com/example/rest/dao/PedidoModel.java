@@ -6,15 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.example.rest.entidades.Cliente;
 import com.example.rest.entidades.Pedido;
 import com.example.rest.entidades.PedidoDetalle;
 import com.example.rest.entidades.Ubigeo;
 import com.example.rest.util.MySqlDBConexion;
 
-import lombok.extern.apachecommons.CommonsLog;
-@CommonsLog
 public class PedidoModel {
+	private static final Log log = LogFactory.getLog(MarcaModel.class);
 
 	public int inserta(Pedido pedido) {
 		log.info("---> En MySqlPedido-> inserta");
@@ -26,18 +28,18 @@ public class PedidoModel {
 			conn = MySqlDBConexion.getConexion();
 			// Se anula el auto envío
 			conn.setAutoCommit(false);
-			log.info(pedido.getUbigeo().getIdUbigeo()+"");
+			log.info(pedido.getUbigeo().getIdUbigeo() + "");
 			// se crea el sql de la cabecera
 			String sql1 = "insert into pedido values(null,curtime(),?,?,'PENDIENTE',?,?,?)";
 			pstm1 = conn.prepareStatement(sql1);
-			pstm1.setDate(1,pedido.getFechaEntrega());
+			pstm1.setDate(1, pedido.getFechaEntrega());
 			pstm1.setString(2, pedido.getLugarEntrega());
 			pstm1.setInt(3, pedido.getCliente().getIdCliente());
-			pstm1.setInt(4,pedido.getUbigeo().getIdUbigeo());
+			pstm1.setInt(4, pedido.getUbigeo().getIdUbigeo());
 			pstm1.setInt(5, pedido.getUsuario().getIdUsuario());
 			pstm1.executeUpdate();
 			log.info(pstm1);
-			
+
 			// se obtiene el idProducto insertado
 			String sql2 = "select max(idPedido) from pedido";
 			pstm2 = conn.prepareStatement(sql2);
@@ -80,41 +82,41 @@ public class PedidoModel {
 		}
 		return contador;
 	}
-	
-	public ArrayList<Pedido> listaPedidoPorId(int idPedido){
-		ArrayList<Pedido> lista = new  ArrayList<Pedido>();
-		
+
+	public ArrayList<Pedido> listaPedidoPorId(int idPedido) {
+		ArrayList<Pedido> lista = new ArrayList<Pedido>();
+
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		
+
 		try {
-			//1 Se realiza la conexión a la bd
+			// 1 Se realiza la conexión a la bd
 			conn = MySqlDBConexion.getConexion();
-			
-			//2 Se prepara el SQL
+
+			// 2 Se prepara el SQL
 			String sql = "select c.idcliente,c.nombres,p.idpedido,p.fechaRegistro,"
-					+ "p.fechaEntrega,p.lugarEntrega,p.estado,u.idubigeo from pedido p join cliente c \r\n" + 
-					"on p.idcliente=c.idcliente join ubigeo u on p.idubigeo=u.idubigeo where p.idpedido = ?";
+					+ "p.fechaEntrega,p.lugarEntrega,p.estado,u.idubigeo from pedido p join cliente c \r\n"
+					+ "on p.idcliente=c.idcliente join ubigeo u on p.idubigeo=u.idubigeo where p.idpedido = ?";
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, idPedido);
 			log.info(pstm);
-			
-			//3 se ejecuta el sql en la BD
+
+			// 3 se ejecuta el sql en la BD
 			rs = pstm.executeQuery();
-			
-			//4 se pasa los datos del RS al ArrayList
+
+			// 4 se pasa los datos del RS al ArrayList
 			Pedido obj = null;
 			Ubigeo objUbi = null;
 			Cliente objCli = null;
-			while(rs.next()) {
+			while (rs.next()) {
 				objCli = new Cliente();
 				objCli.setIdCliente(rs.getInt(1));
 				objCli.setNombres(rs.getString(2));
-				
+
 				objUbi = new Ubigeo();
 				objUbi.setIdUbigeo(rs.getInt(8));
-				
+
 				obj = new Pedido();
 				obj.setCliente(objCli);
 				obj.setIdPedido(rs.getInt(3));
@@ -123,56 +125,59 @@ public class PedidoModel {
 				obj.setLugarEntrega(rs.getString(6));
 				obj.setEstado(rs.getString(7));
 				obj.setUbigeo(objUbi);
-				
+
 				lista.add(obj);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (rs != null) rs.close();
-				if (pstm != null) pstm.close();
-				if (conn != null) conn.close(); 
-			} catch (Exception e2) {}
+				if (rs != null)
+					rs.close();
+				if (pstm != null)
+					pstm.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e2) {
+			}
 		}
-		
+
 		return lista;
 	}
-	
-	
-	public ArrayList<Pedido> listaPedido(){
-		ArrayList<Pedido> lista = new  ArrayList<Pedido>();
-		
+
+	public ArrayList<Pedido> listaPedido() {
+		ArrayList<Pedido> lista = new ArrayList<Pedido>();
+
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		
+
 		try {
-			//1 Se realiza la conexión a la bd
+			// 1 Se realiza la conexión a la bd
 			conn = MySqlDBConexion.getConexion();
-			
-			//2 Se prepara el SQL
+
+			// 2 Se prepara el SQL
 			String sql = "select c.idcliente,c.nombres,p.idpedido,p.fechaRegistro,"
-					+ "p.fechaEntrega,p.lugarEntrega,p.estado,u.idubigeo from pedido p join cliente c \r\n" + 
-					"on p.idcliente=c.idcliente join ubigeo u on p.idubigeo=u.idubigeo ";
+					+ "p.fechaEntrega,p.lugarEntrega,p.estado,u.idubigeo from pedido p join cliente c \r\n"
+					+ "on p.idcliente=c.idcliente join ubigeo u on p.idubigeo=u.idubigeo ";
 			pstm = conn.prepareStatement(sql);
 			log.info(pstm);
-			
-			//3 se ejecuta el sql en la BD
+
+			// 3 se ejecuta el sql en la BD
 			rs = pstm.executeQuery();
-			
-			//4 se pasa los datos del RS al ArrayList
+
+			// 4 se pasa los datos del RS al ArrayList
 			Pedido obj = null;
 			Ubigeo objUbi = null;
 			Cliente objCli = null;
-			while(rs.next()) {
+			while (rs.next()) {
 				objCli = new Cliente();
 				objCli.setIdCliente(rs.getInt(1));
 				objCli.setNombres(rs.getString(2));
-				
+
 				objUbi = new Ubigeo();
 				objUbi.setIdUbigeo(rs.getInt(8));
-				
+
 				obj = new Pedido();
 				obj.setCliente(objCli);
 				obj.setIdPedido(rs.getInt(3));
@@ -181,57 +186,61 @@ public class PedidoModel {
 				obj.setLugarEntrega(rs.getString(6));
 				obj.setEstado(rs.getString(7));
 				obj.setUbigeo(objUbi);
-				
+
 				lista.add(obj);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (rs != null) rs.close();
-				if (pstm != null) pstm.close();
-				if (conn != null) conn.close(); 
-			} catch (Exception e2) {}
+				if (rs != null)
+					rs.close();
+				if (pstm != null)
+					pstm.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e2) {
+			}
 		}
-		
+
 		return lista;
 	}
-	
-	public ArrayList<Pedido> listaPedidoporCliente(int idCliente){
-		ArrayList<Pedido> lista = new  ArrayList<Pedido>();
-		
+
+	public ArrayList<Pedido> listaPedidoporCliente(int idCliente) {
+		ArrayList<Pedido> lista = new ArrayList<Pedido>();
+
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		
+
 		try {
-			//1 Se realiza la conexión a la bd
+			// 1 Se realiza la conexión a la bd
 			conn = MySqlDBConexion.getConexion();
-			
-			//2 Se prepara el SQL
-			String sql = "select c.idcliente,c.nombres,p.idpedido,p.fechaRegistro,p.fechaEntrega,p.lugarEntrega,p.estado,u.idubigeo \r\n" + 
-					"from sistema_delivery_simple.pedido p join sistema_delivery_simple.cliente c \r\n" + 
-					"on p.idcliente=c.idcliente join ubigeo u on p.idubigeo=u.idubigeo where c.idcliente=?";
+
+			// 2 Se prepara el SQL
+			String sql = "select c.idcliente,c.nombres,p.idpedido,p.fechaRegistro,p.fechaEntrega,p.lugarEntrega,p.estado,u.idubigeo \r\n"
+					+ "from sistema_delivery_simple.pedido p join sistema_delivery_simple.cliente c \r\n"
+					+ "on p.idcliente=c.idcliente join ubigeo u on p.idubigeo=u.idubigeo where c.idcliente=?";
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, idCliente);
-	
+
 			log.info(pstm);
-			
-			//3 se ejecuta el sql en la BD
+
+			// 3 se ejecuta el sql en la BD
 			rs = pstm.executeQuery();
-			
-			//4 se pasa los datos del RS al ArrayList
+
+			// 4 se pasa los datos del RS al ArrayList
 			Pedido obj = null;
 			Ubigeo objUbi = null;
 			Cliente objCli = null;
-			while(rs.next()) {
+			while (rs.next()) {
 				objCli = new Cliente();
 				objCli.setIdCliente(rs.getInt(1));
 				objCli.setNombres(rs.getString(2));
-				
+
 				objUbi = new Ubigeo();
 				objUbi.setIdUbigeo(rs.getInt(8));
-				
+
 				obj = new Pedido();
 				obj.setCliente(objCli);
 				obj.setIdPedido(rs.getInt(3));
@@ -240,25 +249,24 @@ public class PedidoModel {
 				obj.setLugarEntrega(rs.getString(6));
 				obj.setEstado(rs.getString(7));
 				obj.setUbigeo(objUbi);
-				
+
 				lista.add(obj);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (rs != null) rs.close();
-				if (pstm != null) pstm.close();
-				if (conn != null) conn.close(); 
-			} catch (Exception e2) {}
+				if (rs != null)
+					rs.close();
+				if (pstm != null)
+					pstm.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e2) {
+			}
 		}
-		
+
 		return lista;
 	}
 
 }
-
-
-
-
-

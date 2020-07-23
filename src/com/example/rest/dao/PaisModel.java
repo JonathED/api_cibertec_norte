@@ -10,9 +10,12 @@ import java.util.List;
 import com.example.rest.entidades.Pais;
 import com.example.rest.util.MySqlDBConexion;
 
-import lombok.extern.apachecommons.CommonsLog;
-@CommonsLog
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class PaisModel {
+
+	private static final Log log = LogFactory.getLog(MarcaModel.class);
 	//El metodo que va inserta enb la tabla tiporeclamo
 		public int insertaPais(Pais c){
 			int salida = -1;

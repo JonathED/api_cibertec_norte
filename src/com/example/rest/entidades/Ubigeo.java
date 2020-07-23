@@ -1,12 +1,5 @@
 package com.example.rest.entidades;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Getter
-@Setter
-@NoArgsConstructor
 public class Ubigeo {
 
 	private int idUbigeo;
@@ -14,5 +7,36 @@ public class Ubigeo {
 	private String provincia;
 	private String distrito;
 
-	
+	public int getIdUbigeo() {
+		return idUbigeo;
+	}
+
+	public void setIdUbigeo(int idUbigeo) {
+		this.idUbigeo = idUbigeo;
+	}
+
+	public String getDepartamento() {
+		return departamento;
+	}
+
+	public void setDepartamento(String departamento) {
+		this.departamento = departamento;
+	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+
+	public String getDistrito() {
+		return distrito;
+	}
+
+	public void setDistrito(String distrito) {
+		this.distrito = distrito;
+	}
+
 }

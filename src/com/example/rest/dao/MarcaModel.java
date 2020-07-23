@@ -10,11 +10,13 @@ import java.util.List;
 import com.example.rest.entidades.Marca;
 import com.example.rest.util.MySqlDBConexion;
 
-import lombok.extern.apachecommons.CommonsLog;
 
-@CommonsLog
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class MarcaModel {
 
+	private static final Log log = LogFactory.getLog(MarcaModel.class);
 	public List<Marca> listarMarcaTodos() {
 		Connection conn = null;
 		PreparedStatement pstm = null;

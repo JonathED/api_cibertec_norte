@@ -6,9 +6,13 @@ import java.sql.PreparedStatement;
 import com.example.rest.entidades.Producto;
 import com.example.rest.util.MySqlDBConexion;
 
-import lombok.extern.apachecommons.CommonsLog;
-@CommonsLog
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class ProductoModel {
+
+	private static final Log log = LogFactory.getLog(MarcaModel.class);
 	public int insertaProducto(Producto p) {
 		int salida = -1;
 		Connection con = null;
